@@ -1,0 +1,19 @@
+# Ignore IDE files
+.idea/
+
+# Ignore Python cache files
+__pycache__/
+*.pyc
+
+# Ignore the virtual environment directory
+venv/
+
+# Ignore data files if not needed
+data.json 
+
+# (Do not ignore) Application code files
+# app.py  (Include this in version control)
+# scrape.py  (Include this in version control)
+
+# (Do not ignore) Template files
+# templates/

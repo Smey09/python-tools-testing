@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scraped Data</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script>
+        function copyDataAsJSON() {
+            // Extract the data from the table
+            const data = [];
+            const rows = document.querySelectorAll('table tbody tr');
+            rows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                const item = {};
+                cells.forEach((cell, index) => {
+                    const header = row.parentNode.parentNode.querySelectorAll('th')[index].innerText;
+                    item[header] = cell.innerText;
+                });
+                data.push(item);
+            });
+
+            // Convert to JSON and copy to clipboard
+            const jsonData = JSON.stringify(data, null, 2);
+            navigator.clipboard.writeText(jsonData).then(() => {
+                alert('Data copied to clipboard!');
+            }).catch(err => {
+                console.error('Error copying text: ', err);
+            });
+        }
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Scraped Data</h1>
+        <button class="btn btn-primary mb-3" onclick="copyDataAsJSON()">Copy as JSON</button>
+
+        {% if data['data'] %}
+        <p>Total Entries: {{ data['data'] | length }}</p>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    {% for key in data['data'][0].keys() %}
+                    <th>{{ key }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in data['data'] %}
+                <tr>
+                    {% for value in item.values() %}
+                    <td>{{ value }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="alert alert-warning">No data found.</div>
+        {% endif %}
+    </div>
+</body>
+
+</html>
